@@ -1,7 +1,7 @@
 
 /*
  * *** PLACE YOUR NAME / SECTION HERE ***
- *
+ * Yash Patel - Section: 001
  * Homework # 2 (Programming Assignment). This Java class defines a few basic
  * manipulation operations of a binary trees.
  *
@@ -11,6 +11,7 @@
 
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Stack;
 
 /*
  * Class BinaryTree
@@ -58,7 +59,7 @@ public class BinaryTree {
         root = node;
     }
 
-    /* 
+    /*
      * Class Node
      *
      * The node object definition for each node of the bin ary tree.
@@ -178,7 +179,7 @@ public class BinaryTree {
      * which does the actual work. The public wrapper method simply passes the root
      * of the tree to helper method.
      */
-    
+
     public String preOrder() {
         return preOrderHelper(root);
     }
@@ -225,6 +226,21 @@ public class BinaryTree {
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
 
+        //Check to see if the tree is empty
+        if (node == null){
+            return;
+        }
+
+        //If node value matches the value of the old value, it will replace it with the new value
+        if (node.data == oldVal){
+            node.data = newVal;
+        }
+
+        //Left Subtree
+        replaceValueHelper(node.left, oldVal, newVal);
+
+        //Right Subtree
+        replaceValueHelper(node.right, oldVal, newVal);
     }
 
 
@@ -247,7 +263,14 @@ public class BinaryTree {
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
 
-        return Integer.MAX_VALUE;
+        if (node == null) {
+            return Integer.MAX_VALUE;
+        }
+
+        int leftMin = findMinHelper(node.left);
+        int rightMin = findMinHelper(node.right);
+
+        return Math.min(node.data, Math.min(leftMin,rightMin));
     }
 
 
@@ -271,8 +294,25 @@ public class BinaryTree {
 
         // return -1; // RECALL, IF TREE IS EMPTY, RETURN -1
 
+        //if the node is empty, return 0
+        if (node == null){
+            return 0;
+        }
 
-        return -1;
+        //Initialize the count for the current node
+        int count = 0 ;
+
+        // If the data of the value is greater than increment it
+        if(node.data > val){
+            count = 1;
+        }
+
+        // count the nodes on the left and right subtrees
+        int leftCount = nodesGTHelper(node.left, val);
+        int rightCount = nodesGTHelper(node.right, val);
+
+        //Return the total count of nodes
+        return count + leftCount + rightCount;
     }
 
 
@@ -311,6 +351,17 @@ public class BinaryTree {
         // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
         // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
 
-        return new int[]{0, 0};
+        if (n == null) {
+            return new int[]{0, 0};
+        }
+        //Get a total count of left and right children
+        int[] leftTotal = averageHelper(n.left);
+        int[] rightTotal = averageHelper(n.right);
+
+        //Calculate the Total Sum and Count
+        int totalSum = n.data + leftTotal[0] + rightTotal[0];
+        int totalCount = 1 + leftTotal[1] + rightTotal[1];
+
+        return new int[]{totalSum, totalCount};
     }
 }
